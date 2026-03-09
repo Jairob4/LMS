@@ -14,8 +14,8 @@ public interface AssesmentRepository extends JpaRepository<Assesment, UUID> {
     // ORM - buscar evaluaciones de un estudiante
     List<Assesment> findByStudentId(UUID studentId);
 
-    // ORM - buscar evaluaciones de una lección
-    List<Assesment> findByLessonId(UUID lessonId);
+    // ORM - buscar evaluaciones de un curso
+    List<Assesment> findByCourseId(UUID courseId);
 
     // ORM - buscar por tipo de evaluación
     List<Assesment> findByType(String type);
@@ -26,9 +26,9 @@ public interface AssesmentRepository extends JpaRepository<Assesment, UUID> {
     // ORM - buscar evaluaciones entre dos fechas
     List<Assesment> findByTakenAtBetween(Instant start, Instant end);
 
-    // JPQL - obtener puntaje promedio de una lección
-    @Query("SELECT AVG(a.score) FROM Assesment a WHERE a.lesson.id = :lessonId")
-    Double findAverageScoreByLessonId(@Param("lessonId") UUID lessonId);
+    // JPQL - obtener puntaje promedio de un curso
+    @Query("SELECT AVG(a.score) FROM Assesment a WHERE a.course.id = :courseId")
+    Double findAverageScoreByCourseId(@Param("courseId") UUID courseId);
 
     // JPQL - obtener evaluaciones de un estudiante en un curso específico
     @Query("SELECT a FROM Assesment a WHERE a.student.id = :studentId AND a.course.id = :courseId")
