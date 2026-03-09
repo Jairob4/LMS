@@ -30,10 +30,10 @@ public interface AssesmentRepository extends JpaRepository<Assesment, UUID> {
     @Query("SELECT AVG(a.score) FROM Assesment a WHERE a.lesson.id = :lessonId")
     Double findAverageScoreByLessonId(@Param("lessonId") UUID lessonId);
 
-    // JPQL - obtener evaluaciones de un estudiante en una lección específica
-    @Query("SELECT a FROM Assesment a WHERE a.student.id = :studentId AND a.lesson.id = :lessonId")
-    List<Assesment> findByStudentIdAndLessonId(@Param("studentId") UUID studentId,
-                                               @Param("lessonId") UUID lessonId);
+    // JPQL - obtener evaluaciones de un estudiante en un curso específico
+    @Query("SELECT a FROM Assesment a WHERE a.student.id = :studentId AND a.course.id = :courseId")
+    List<Assesment> findByStudentIdAndCourseId(@Param("studentId") UUID studentId,
+                                                @Param("courseId") UUID courseId);
 
     // JPQL - obtener evaluaciones de un estudiante con puntaje mayor a un umbral
     @Query("SELECT a FROM Assesment a WHERE a.student.id = :studentId AND a.score >= :minScore ORDER BY a.score DESC")
