@@ -27,13 +27,20 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     @Autowired
     private CourseRepository courseRepository;
 
+<<<<<<< HEAD
     @Autowired
     private LessonRepository lessonRepository;
+=======
+    
+>>>>>>> pruebas
 
     @BeforeEach
     void clean() {
         assesmentRepository.deleteAll();
+<<<<<<< HEAD
         lessonRepository.deleteAll();
+=======
+>>>>>>> pruebas
         courseRepository.deleteAll();
         instructorRepository.deleteAll();
         studentRepository.deleteAll();
@@ -65,6 +72,7 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         return courseRepository.save(course);
     }
 
+<<<<<<< HEAD
     private Lesson createLesson(Course course) {
 
         Lesson lesson = Lesson.builder()
@@ -75,6 +83,8 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
 
         return lessonRepository.save(lesson);
     }
+=======
+>>>>>>> pruebas
 
     private Student createStudent() {
 
@@ -88,11 +98,19 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         return studentRepository.save(student);
     }
 
+<<<<<<< HEAD
     private Assesment createAssesment(Student student, Lesson lesson, int score, String type) {
 
         Assesment assesment = Assesment.builder()
                 .student(student)
                 .lesson(lesson)
+=======
+    private Assesment createAssesment(Student student, Course course, int score, String type) {
+
+        Assesment assesment = Assesment.builder()
+                .student(student)
+                .course(course)
+>>>>>>> pruebas
                 .score(score)
                 .type(type)
                 .takenAt(Instant.now())
@@ -102,15 +120,26 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    // en este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para cada estudiante en ese curso, luego se verifica si al buscar por el id del estudiante se obtienen ambas evaluaciones
+>>>>>>> pruebas
     void shouldFindByStudentId() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
         createAssesment(student, lesson, 80, "quiz");
         createAssesment(student, lesson, 90, "exam");
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 80, "quiz");
+        createAssesment(student, course, 90, "exam");
+>>>>>>> pruebas
 
         List<Assesment> result =
                 assesmentRepository.findByStudentId(student.getId());
@@ -119,6 +148,7 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
     void shouldFindByLessonId() {
 
         Instructor instructor = createInstructor();
@@ -135,15 +165,42 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+=======
+    // en este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar por el id del curso se obtienen ambas evaluaciones
+    void shouldFindByCourseId() {
+
+        Instructor instructor = createInstructor();
+        Course course = createCourse(instructor);
+        Student student = createStudent();
+
+        createAssesment(student, course, 80, "quiz");
+        createAssesment(student, course, 90, "exam");
+
+        List<Assesment> result =
+                assesmentRepository.findByCourseId(course.getId());
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    // en este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar por el tipo de evaluación se obtiene la evaluación correcta
+>>>>>>> pruebas
     void shouldFindByType() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
         createAssesment(student, lesson, 85, "quiz");
         createAssesment(student, lesson, 95, "exam");
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 85, "quiz");
+        createAssesment(student, course, 95, "exam");
+>>>>>>> pruebas
 
         List<Assesment> result =
                 assesmentRepository.findByType("quiz");
@@ -153,15 +210,26 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    // en este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar por el puntaje mayor o igual a un valor se obtiene la evaluación correcta
+>>>>>>> pruebas
     void shouldFindByScoreGreaterThanEqual() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
         createAssesment(student, lesson, 60, "quiz");
         createAssesment(student, lesson, 90, "exam");
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 60, "quiz");
+        createAssesment(student, course, 90, "exam");
+>>>>>>> pruebas
 
         List<Assesment> result =
                 assesmentRepository.findByScoreGreaterThanEqual(80);
@@ -170,16 +238,27 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    // en este test se crea un instructor, un curso, un estudiante y una evaluación para ese curso, luego se verifica si al buscar por las evaluaciones entre dos fechas se obtiene la evaluación correcta
+>>>>>>> pruebas
     void shouldFindByTakenAtBetween() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
+=======
+>>>>>>> pruebas
         Student student = createStudent();
 
         Instant now = Instant.now();
 
+<<<<<<< HEAD
         createAssesment(student, lesson, 75, "quiz");
+=======
+        createAssesment(student, course, 75, "quiz");
+>>>>>>> pruebas
 
         List<Assesment> result =
                 assesmentRepository.findByTakenAtBetween(
@@ -191,10 +270,15 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    // Para este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar el puntaje promedio por el id del curso se obtiene el valor correcto
+>>>>>>> pruebas
     void shouldCalculateAverageScoreByLesson() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
@@ -203,11 +287,21 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
 
         Double avg =
                 assesmentRepository.findAverageScoreByLessonId(lesson.getId());
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 80, "quiz");
+        createAssesment(student, course, 100, "quiz");
+
+        Double avg =
+                assesmentRepository.findAverageScoreByCourseId(course.getId());
+>>>>>>> pruebas
 
         assertThat(avg).isEqualTo(90.0);
     }
 
     @Test
+<<<<<<< HEAD
     void shouldFindByStudentAndLesson() {
 
         Instructor instructor = createInstructor();
@@ -221,21 +315,47 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
                 assesmentRepository.findByStudentIdAndLessonId(
                         student.getId(),
                         lesson.getId()
+=======
+    // Para este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar por el id del estudiante y el id del curso se obtienen ambas evaluaciones
+    void shouldFindByStudentAndCourseId() {
+
+        Instructor instructor = createInstructor();
+        Course course = createCourse(instructor);
+        Student student = createStudent();
+
+        createAssesment(student, course, 85, "quiz");
+
+        List<Assesment> result =
+                assesmentRepository.findByStudentIdAndCourseId(
+                        student.getId(),
+                        course.getId()
+>>>>>>> pruebas
                 );
 
         assertThat(result).hasSize(1);
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    // Para este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar por el id del estudiante y un puntaje mínimo se obtiene la evaluación correcta
+>>>>>>> pruebas
     void shouldFindPassingAssesmentsByStudent() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
         createAssesment(student, lesson, 60, "quiz");
         createAssesment(student, lesson, 95, "exam");
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 60, "quiz");
+        createAssesment(student, course, 95, "exam");
+>>>>>>> pruebas
 
         List<Assesment> result =
                 assesmentRepository.findPassingAssesmentsByStudent(
@@ -248,15 +368,26 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
+=======
+    // Para este test se crea un instructor, un curso, un estudiante y 2 evaluaciones para ese curso, luego se verifica si al buscar el puntaje máximo por tipo de evaluación se obtiene el valor correcto
+>>>>>>> pruebas
     void shouldFindMaxScoreByType() {
 
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
         createAssesment(student, lesson, 80, "quiz");
         createAssesment(student, lesson, 95, "quiz");
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 80, "quiz");
+        createAssesment(student, course, 95, "quiz");
+>>>>>>> pruebas
 
         List<Object[]> result = assesmentRepository.findMaxScoreByType();
 

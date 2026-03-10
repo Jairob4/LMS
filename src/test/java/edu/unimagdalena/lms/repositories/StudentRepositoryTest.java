@@ -85,10 +85,17 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
         return studentRepository.save(student);
     }
 
+<<<<<<< HEAD
     private Assesment createAssesment(Student student, Lesson lesson, int score) {
         Assesment assesment = Assesment.builder()
                 .student(student)
                 .lesson(lesson)
+=======
+    private Assesment createAssesment(Student student, Course course, int score) {
+        Assesment assesment = Assesment.builder()
+                .student(student)
+                .course(course)
+>>>>>>> pruebas
                 .score(score)
                 .type("quiz")
                 .takenAt(Instant.now())
@@ -164,10 +171,16 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
     void shouldFindStudentsWithAssesments() {
         Instructor instructor = createInstructor();
         Course course = createCourse(instructor);
+<<<<<<< HEAD
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
         createAssesment(student, lesson, 80);
+=======
+        Student student = createStudent();
+
+        createAssesment(student, course, 80);
+>>>>>>> pruebas
 
         List<Student> studentsWithAssesments = studentRepository.findStudentsWithAssesments();
 
@@ -183,8 +196,13 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
         Lesson lesson = createLesson(course);
         Student student = createStudent();
 
+<<<<<<< HEAD
         createAssesment(student, lesson, 80);
         createAssesment(student, lesson, 100);
+=======
+        createAssesment(student, course, 80);
+        createAssesment(student, course, 100);
+>>>>>>> pruebas
 
         Double avg = studentRepository.findAverageScoreByStudentId(student.getId());
 

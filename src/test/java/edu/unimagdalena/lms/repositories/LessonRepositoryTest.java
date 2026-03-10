@@ -25,6 +25,7 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
     @Autowired
     private InstructorRepository instructorRepository;
 
+<<<<<<< HEAD
     @Autowired
     private StudentRepository studentRepository;
 
@@ -38,6 +39,14 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         courseRepository.deleteAll();
         instructorRepository.deleteAll();
         studentRepository.deleteAll();
+=======
+
+    @BeforeEach
+    void clean() {
+        lessonRepository.deleteAll();
+        courseRepository.deleteAll();
+        instructorRepository.deleteAll();
+>>>>>>> pruebas
     }
 
     private Instructor createInstructor() {
@@ -74,6 +83,7 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         return lessonRepository.save(lesson);
     }
 
+<<<<<<< HEAD
     private Student createStudent() {
         Student student = Student.builder()
                 .email("student" + UUID.randomUUID() + "@test.com")
@@ -97,6 +107,8 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         return assesmentRepository.save(assesment);
     }
 
+=======
+>>>>>>> pruebas
     @Test
     // Para este test se crea un curso con lecciones, luego se verifica si se obtienen las lecciones por courseId
     void shouldFindByCourseId() {
@@ -199,6 +211,7 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
+<<<<<<< HEAD
     // Para este test se crea una lección con evaluaciones, luego se verifica si se encuentra en la lista de lecciones con evaluaciones
     void shouldFindLessonsWithAssesments() {
         Instructor instructor = createInstructor();
@@ -212,5 +225,19 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
 
         assertThat(lessonsWithAssesments).hasSize(1);
         assertThat(lessonsWithAssesments.get(0).getId()).isEqualTo(lesson.getId());
+=======
+    // Para este test se crea una lección con un curso, luego se verifica si se encuentra en la lista de lecciones con cursos
+    void shouldFindLessonsWithCourse() {
+        Instructor instructor = createInstructor();
+        Course course = createCourse(instructor);
+        Lesson lesson = createLesson(course, 1);
+
+        List<Lesson> lessonsWithCourse = lessonRepository.findLessonsWithCourse();
+
+        assertThat(lessonsWithCourse).hasSize(1);
+        assertThat(lessonsWithCourse.get(0).getId()).isEqualTo(lesson.getId());
+        assertThat(lessonsWithCourse.get(0).getCourse()).isNotNull();
+        assertThat(lessonsWithCourse.get(0).getCourse().getId()).isEqualTo(course.getId());
+>>>>>>> pruebas
     }
 }
