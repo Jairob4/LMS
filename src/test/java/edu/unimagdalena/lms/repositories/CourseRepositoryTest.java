@@ -27,11 +27,20 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
     @Autowired
     private LessonRepository lessonRepository;
 
+    @Autowired
+    private EnrollmentRepository enrollmentRepository;
+
+    @Autowired
+    private AssesmentRepository assesmentRepository;
+
     @BeforeEach
     void clean(){
         courseRepository.deleteAll();
         instructorRepository.deleteAll();
         studentRepository.deleteAll();
+        enrollmentRepository.deleteAll();
+        lessonRepository.deleteAll();
+        assesmentRepository.deleteAll();
     }
 
     private Instructor createInstructor() {
@@ -67,6 +76,41 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
                 .build();
 
         return lessonRepository.save(lesson);
+    }
+
+    private Enrollment createEnrollment(Student student, Instructor instructor) {
+        Enrollment enrollment = Enrollment.builder()
+                .student(student)
+                .instructor(instructor)
+                .status("ACTIVE")
+                .enrolledAt(Instant.now())
+                .build();
+
+        return enrollmentRepository.save(enrollment);
+    }
+
+    private Assesment createAssesment(Student student, Course course, int score, String type) {
+
+        Assesment assesment = Assesment.builder()
+                .student(student)
+                .course(course)
+                .score(score)
+                .type(type)
+                .takenAt(Instant.now())
+                .build();
+
+        return assesmentRepository.save(assesment);
+    }
+
+    private Student createStudent() {
+        Student student = Student.builder()
+                .email("student" + UUID.randomUUID() + "@test.com")
+                .fullName("Student Test")
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+
+        return studentRepository.save(student);
     }
 
     @Test
@@ -244,5 +288,36 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         assertThat(coursesWithLessons.get(0).getId()).isEqualTo(courseWithLessons.getId());
     }
 
+    @Test
+    // Para este test se crean cursos con una matrícula activa, luego se verifica si se obtienen solo los cursos que tienen matrículas activas
+    void shouldFindCoursesWithActiveEnrollments() {
+        Instructor instructor = createInstructor();
+        Student student = createStudent();
+        Course courseWithActiveEnrollment = createCourse(instructor);
+        Enrollment enrollment = createEnrollment(student, instructor);
+
+        courseWithActiveEnrollment.addEnrollment(enrollment);
+
+        List<Course> coursesWithActiveEnrollments = courseRepository.findCoursesWithActiveEnrollments();
+
+        assertThat(coursesWithActiveEnrollments).hasSize(1);
+        assertThat(coursesWithActiveEnrollments.get(0).getId()).isEqualTo(courseWithActiveEnrollment.getId());
+    }
+
+     @Test
+    // Para este test se crean cursos con una evaluación con puntaje mayor a un valor, luego se verifica si se obtienen solo los cursos que tienen evaluaciones con puntaje mayor a ese valor
+    void shouldFindCoursesWithAssesmentsAboveScore() {
+        Instructor instructor = createInstructor();
+        Student student = createStudent();
+        Course courseWithHighAssesment = createCourse(instructor);
+        Assesment assesment = createAssesment(student, courseWithHighAssesment, 8, "quiz");
+
+        courseWithHighAssesment.addAssesment(assesment);
+
+        List<Course> coursesWithHighAssessments = courseRepository.findCoursesWithAssesmentsAboveScore(7.0);
+
+        assertThat(coursesWithHighAssessments).hasSize(1);
+        assertThat(coursesWithHighAssessments.get(0).getId()).isEqualTo(courseWithHighAssesment.getId());
+    }
 
 }

@@ -40,6 +40,26 @@ public class Course {
         lessons.add(lesson);
     }
 
+    @OneToMany(mappedBy = "course")
+    private Set<Enrollment> enrollments;
+
+    public void addEnrollment(Enrollment enrollment) {
+        if (enrollments == null) {
+            enrollments = new HashSet<>();
+        }
+        enrollments.add(enrollment);
+    }
+
+    @OneToMany(mappedBy = "course")
+    private Set<Assesment> assesments;
+
+    public void addAssesment(Assesment assesment) {
+        if (assesments == null) {
+            assesments = new HashSet<>();
+        }
+        assesments.add(assesment);
+    }
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
