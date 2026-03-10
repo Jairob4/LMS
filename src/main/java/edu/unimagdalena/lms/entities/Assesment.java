@@ -22,13 +22,8 @@ public class Assesment {
     private Student student;
 
     @ManyToOne
-<<<<<<< HEAD
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private Lesson lesson;
-=======
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
->>>>>>> pruebas
 
     @Column(nullable = false)
     private String type;

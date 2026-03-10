@@ -35,13 +35,7 @@ public interface LessonRepository extends JpaRepository<Lesson, UUID> {
     @Query("SELECT l FROM Lesson l WHERE l.course.id = :courseId AND l.orderIndex = (SELECT MAX(l2.orderIndex) FROM Lesson l2 WHERE l2.course.id = :courseId)")
     Optional<Lesson> findLastLessonByCourseId(@Param("courseId") UUID courseId);
 
-<<<<<<< HEAD
-    // JPQL - obtener lecciones con evaluaciones registradas
-    @Query("SELECT DISTINCT l FROM Lesson l WHERE EXISTS (SELECT a FROM Assesment a WHERE a.lesson = l)")
-    List<Lesson> findLessonsWithAssesments();
-=======
     // JPQL - obtener lecciones con cursos registrados
     @Query("SELECT DISTINCT l FROM Lesson l WHERE EXISTS (SELECT c FROM Course c WHERE c.id = l.course.id)")
     List<Lesson> findLessonsWithCourse();
->>>>>>> pruebas
 }

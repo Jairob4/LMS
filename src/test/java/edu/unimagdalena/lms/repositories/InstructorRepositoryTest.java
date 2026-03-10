@@ -56,17 +56,6 @@ class InstructorRepositoryTest extends AbstractIntegrationDBTest {
         return courseRepository.save(course);
     }
 
-    private Student createStudent() {
-        Student student = Student.builder()
-                .email("student" + UUID.randomUUID() + "@test.com")
-                .fullName("Student Test")
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
-
-        return studentRepository.save(student);
-    }
-
     @Test
     // Para este test se crea un instructor, luego se verifica si se encuentra por email
     void shouldFindByEmail() {
@@ -148,7 +137,6 @@ class InstructorRepositoryTest extends AbstractIntegrationDBTest {
         // Verificar conteos
         for (Object[] row : result) {
             UUID id = (UUID) row[0];
-            String name = (String) row[1];
             Long count = (Long) row[2];
             if (id.equals(instructor1.getId())) {
                 assertThat(count).isEqualTo(2L);

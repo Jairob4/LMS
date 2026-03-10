@@ -34,6 +34,6 @@ public interface StudentRepository extends JpaRepository<Student, UUID> {
     List<Student> findStudentsWithAssesments();
 
     // JPQL - obtener puntaje promedio de las evaluaciones de un estudiante
-    @Query("SELECT AVG(a.score) FROM Assesment a WHERE a.student.id = :studentId")
+    @Query("SELECT AVG(a.score) FROM Assessment a WHERE a.student.id = :studentId")
     Double findAverageScoreByStudentId(@Param("studentId") UUID studentId);
 }

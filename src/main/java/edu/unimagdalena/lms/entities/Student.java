@@ -37,11 +37,11 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private Set<Assesment> assesments;
 
-    public void addAssesment(Assesment assesment){
+    public void addAssessment(Assesment assessment){
         if (assesments == null) {
             assesments = new HashSet<>();
         }
-        assesments.add(assesment);
+        assesments.add(assessment);
     }   
 
     @Column(name = "created_at", nullable = false)

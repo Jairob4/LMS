@@ -25,28 +25,12 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
     @Autowired
     private InstructorRepository instructorRepository;
 
-<<<<<<< HEAD
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private AssesmentRepository assesmentRepository;
-
-    @BeforeEach
-    void clean() {
-        assesmentRepository.deleteAll();
-        lessonRepository.deleteAll();
-        courseRepository.deleteAll();
-        instructorRepository.deleteAll();
-        studentRepository.deleteAll();
-=======
 
     @BeforeEach
     void clean() {
         lessonRepository.deleteAll();
         courseRepository.deleteAll();
         instructorRepository.deleteAll();
->>>>>>> pruebas
     }
 
     private Instructor createInstructor() {
@@ -83,32 +67,6 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         return lessonRepository.save(lesson);
     }
 
-<<<<<<< HEAD
-    private Student createStudent() {
-        Student student = Student.builder()
-                .email("student" + UUID.randomUUID() + "@test.com")
-                .fullName("Student Test")
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
-
-        return studentRepository.save(student);
-    }
-
-    private Assesment createAssesment(Student student, Lesson lesson, int score) {
-        Assesment assesment = Assesment.builder()
-                .student(student)
-                .lesson(lesson)
-                .score(score)
-                .type("quiz")
-                .takenAt(Instant.now())
-                .build();
-
-        return assesmentRepository.save(assesment);
-    }
-
-=======
->>>>>>> pruebas
     @Test
     // Para este test se crea un curso con lecciones, luego se verifica si se obtienen las lecciones por courseId
     void shouldFindByCourseId() {
@@ -211,21 +169,6 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
-<<<<<<< HEAD
-    // Para este test se crea una lección con evaluaciones, luego se verifica si se encuentra en la lista de lecciones con evaluaciones
-    void shouldFindLessonsWithAssesments() {
-        Instructor instructor = createInstructor();
-        Course course = createCourse(instructor);
-        Lesson lesson = createLesson(course, 1);
-        Student student = createStudent();
-
-        createAssesment(student, lesson, 80);
-
-        List<Lesson> lessonsWithAssesments = lessonRepository.findLessonsWithAssesments();
-
-        assertThat(lessonsWithAssesments).hasSize(1);
-        assertThat(lessonsWithAssesments.get(0).getId()).isEqualTo(lesson.getId());
-=======
     // Para este test se crea una lección con un curso, luego se verifica si se encuentra en la lista de lecciones con cursos
     void shouldFindLessonsWithCourse() {
         Instructor instructor = createInstructor();
@@ -238,6 +181,5 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         assertThat(lessonsWithCourse.get(0).getId()).isEqualTo(lesson.getId());
         assertThat(lessonsWithCourse.get(0).getCourse()).isNotNull();
         assertThat(lessonsWithCourse.get(0).getCourse().getId()).isEqualTo(course.getId());
->>>>>>> pruebas
     }
 }
