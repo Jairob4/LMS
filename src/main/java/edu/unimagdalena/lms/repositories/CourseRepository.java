@@ -41,4 +41,12 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
     // JPQL - buscar cursos que tengan al menos una lección
     @Query("SELECT DISTINCT c FROM Course c WHERE SIZE(c.lessons) > 0")
     List<Course> findCoursesWithLessons();
+
+    // JPQL - buscar cursos que tengan al menos una matrícula activa
+    @Query("SELECT DISTINCT c FROM Course c JOIN c.enrollments e WHERE e.status = 'ACTIVE'")
+    List<Course> findCoursesWithActiveEnrollments();
+
+    // JPQL - buscar cursos que tengan al menos una evaluación con puntaje mayor a un valor
+    @Query("SELECT DISTINCT c FROM Course c JOIN c.assesments a WHERE a.score > :score")
+    List<Course> findCoursesWithAssesmentsAboveScore(@Param("score") double score);
 }
