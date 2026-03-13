@@ -25,13 +25,17 @@ public class Instructor {
     private String fullName;
 
     @OneToMany(mappedBy = "instructor")
-    private Set<Course> courses;
+    @Builder.Default
+    private Set<Course> courses = new HashSet<>();
 
     public void addCourse(Course course){
-        if (courses == null) {
-            courses = new HashSet<>();
-        }
-        courses.add(course);
+       courses.add(course);
+       course.setInstructor(this);  
+    }
+
+    public void removeCourse(Course course){
+        courses.remove(course);
+        course.setInstructor(null);
     }
     
     @Column(name = "created_at", nullable = false)
