@@ -31,13 +31,31 @@ public class Course {
     private boolean active;
 
     @OneToMany(mappedBy = "course")
-    private Set<Lesson> lessons;
+    @Builder.Default
+    private Set<Lesson> lessons = new HashSet<>();
 
     public void addLesson(Lesson lesson) {
-        if (lessons == null) {
-            lessons = new HashSet<>();
-        }
         lessons.add(lesson);
+        lesson.setCourse(this);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        lessons.remove(lesson);
+        lesson.setCourse(null);
+    }   
+    
+    @OneToMany(mappedBy = "course")
+    @Builder.Default
+    private Set<Assesment> assesments = new HashSet<>();
+
+    public void addAssessment(Assesment assessment){
+        assesments.add(assessment);
+        assessment.setCourse(this);
+    }
+
+     public void removeAssessment(Assesment assessment){
+        assesments.remove(assessment);
+        assessment.setCourse(null);
     }
 
     @Column(name = "created_at", nullable = false)

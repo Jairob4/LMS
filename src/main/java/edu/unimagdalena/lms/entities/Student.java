@@ -25,24 +25,32 @@ public class Student {
     private String fullName;
 
     @OneToMany(mappedBy = "student")
-    private Set<Enrollment> enrollments;
+    @Builder.Default
+    private Set<Enrollment> enrollments = new HashSet<>();
 
     public void addEnrollment(Enrollment enrollment){
-        if (enrollments == null) {
-            enrollments = new HashSet<>();
-        }
         enrollments.add(enrollment);
+        enrollment.setStudent(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment){
+        enrollments.remove(enrollment);
+        enrollment.setStudent(null);
     }
 
     @OneToMany(mappedBy = "student")
-    private Set<Assesment> assesments;
+    @Builder.Default
+    private Set<Assesment> assesments = new HashSet<>();
 
     public void addAssessment(Assesment assessment){
-        if (assesments == null) {
-            assesments = new HashSet<>();
-        }
         assesments.add(assessment);
+        assessment.setStudent(this);
     }   
+    
+    public void removeAssessment(Assesment assessment){
+        assesments.remove(assessment);
+        assessment.setStudent(null);
+    }
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

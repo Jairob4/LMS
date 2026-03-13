@@ -19,25 +19,11 @@ public class Assesment {
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    @Builder.Default
-    private Set<Student> student = new HashSet<>();
-
-    public void addStudent(Student s){
-        student.add(s);
-        s.getAssesments().add(this);
-
-    }
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    @Builder.Default
-    private Set<Course> course = new HashSet<>();
-
-     public void addCourse(Course c){
-        course.add(c);
-        c.getAssesments().add(this);
-
-    }
+    private Course course;
 
     @Column(nullable = false)
     private String type;
