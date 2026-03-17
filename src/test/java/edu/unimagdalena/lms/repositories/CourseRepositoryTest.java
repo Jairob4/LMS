@@ -78,10 +78,10 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         return lessonRepository.save(lesson);
     }
 
-    private Enrollment createEnrollment(Student student, Instructor instructor) {
+    private Enrollment createEnrollment(Student student, Course course) {
         Enrollment enrollment = Enrollment.builder()
                 .student(student)
-                .instructor(instructor)
+                .course(course)
                 .status("ACTIVE")
                 .enrolledAt(Instant.now())
                 .build();
@@ -294,7 +294,7 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         Instructor instructor = createInstructor();
         Student student = createStudent();
         Course courseWithActiveEnrollment = createCourse(instructor);
-        Enrollment enrollment = createEnrollment(student, instructor);
+        Enrollment enrollment = createEnrollment(student, courseWithActiveEnrollment);
 
         courseWithActiveEnrollment.addEnrollment(enrollment);
 
