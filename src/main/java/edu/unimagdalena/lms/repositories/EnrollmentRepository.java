@@ -14,8 +14,8 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
     // ORM - buscar matrículas de un estudiante
     List<Enrollment> findByStudentId(UUID studentId);
 
-    // ORM - buscar matrículas de un instructor
-    List<Enrollment> findByInstructorId(UUID instructorId);
+    // ORM - buscar matrículas de un curso
+    List<Enrollment> findByCourseId(UUID courseId);
 
     // ORM - buscar por estado
     List<Enrollment> findByStatus(String status);
@@ -26,10 +26,10 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, UUID> {
     // ORM - buscar matrículas creadas después de una fecha
     List<Enrollment> findByEnrolledAtAfter(Instant enrolledAt);
 
-    // JPQL - verificar si un estudiante ya está matriculado en un instructor
-    @Query("SELECT COUNT(e) > 0 FROM Enrollment e WHERE e.student.id = :studentId AND e.instructor.id = :instructorId")
-    boolean existsByStudentIdAndInstructorId(@Param("studentId") UUID studentId,
-                                             @Param("instructorId") UUID instructorId);
+    // JPQL - verificar si un estudiante ya está matriculado en un curso 
+    @Query("SELECT COUNT(e) > 0 FROM Enrollment e WHERE e.student.id = :studentId AND e.course.id = :courseId")
+    boolean existsByStudentIdAndCourseId(@Param("studentId") UUID studentId,
+                                          @Param("courseId") UUID courseId);
 
     // JPQL - contar matrículas por estado
     @Query("SELECT e.status, COUNT(e) FROM Enrollment e GROUP BY e.status")

@@ -22,28 +22,25 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     private StudentRepository studentRepository;
 
     @Autowired
-    private InstructorRepository instructorRepository;
-
-    @Autowired
     private CourseRepository courseRepository;
 
     @BeforeEach
     void clean() {
         enrollmentRepository.deleteAll();
         courseRepository.deleteAll();
-        instructorRepository.deleteAll();
         studentRepository.deleteAll();
     }
 
-    private Instructor createInstructor() {
-        Instructor instructor = Instructor.builder()
-                .email("instructor" + UUID.randomUUID() + "@test.com")
-                .fullName("Instructor Test")
+    private Course createCourse() {
+        Course course = Course.builder()
+                .title("Course Test")
+                .status("ACTIVE")
+                .active(true)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .build();
 
-        return instructorRepository.save(instructor);
+        return courseRepository.save(course);
     }
 
     private Student createStudent() {
@@ -57,10 +54,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         return studentRepository.save(student);
     }
 
-    private Enrollment createEnrollment(Student student, Instructor instructor, String status) {
+    private Enrollment createEnrollment(Student student, Course course, String status) {
         Enrollment enrollment = Enrollment.builder()
                 .student(student)
-                .instructor(instructor)
+                .course(course)
                 .status(status)
                 .enrolledAt(Instant.now())
                 .build();
@@ -72,8 +69,8 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crea un estudiante con matrículas, luego se verifica si se obtienen las matrículas por studentId
     void shouldFindByStudentId() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        Enrollment enrollment = createEnrollment(student, instructor, "ACTIVE");
+        Course course = createCourse();
+        Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
         List<Enrollment> enrollments = enrollmentRepository.findByStudentId(student.getId());
 
@@ -82,13 +79,13 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     }
 
     @Test
-    // Para este test se crea un instructor con matrículas, luego se verifica si se obtienen las matrículas por instructorId
-    void shouldFindByInstructorId() {
+    // Para este test se crea un curso con matrículas, luego se verifica si se obtienen las matrículas por courseId
+    void shouldFindByCourseId() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        Enrollment enrollment = createEnrollment(student, instructor, "ACTIVE");
+        Course course = createCourse();
+        Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
-        List<Enrollment> enrollments = enrollmentRepository.findByInstructorId(instructor.getId());
+        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course.getId());
 
         assertThat(enrollments).hasSize(1);
         assertThat(enrollments.get(0).getId()).isEqualTo(enrollment.getId());
@@ -98,9 +95,9 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crean matrículas con diferentes estados, luego se verifica la búsqueda por estado
     void shouldFindByStatus() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        Enrollment enrollment1 = createEnrollment(student, instructor, "ACTIVE");
-        Enrollment enrollment2 = createEnrollment(student, instructor, "INACTIVE");
+        Course course = createCourse();
+        Enrollment enrollment1 = createEnrollment(student, course, "ACTIVE");
+        Enrollment enrollment2 = createEnrollment(student, course, "INACTIVE");
 
         List<Enrollment> activeEnrollments = enrollmentRepository.findByStatus("ACTIVE");
 
@@ -112,8 +109,8 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crea un estudiante con matrículas de diferentes estados, luego se verifica la búsqueda por studentId y status
     void shouldFindByStudentIdAndStatus() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        Enrollment enrollment = createEnrollment(student, instructor, "ACTIVE");
+        Course course = createCourse();
+        Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
         List<Enrollment> enrollments = enrollmentRepository.findByStudentIdAndStatus(student.getId(), "ACTIVE");
 
@@ -125,8 +122,8 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crean matrículas en diferentes momentos, luego se verifica la búsqueda por enrolledAt después de una fecha
     void shouldFindByEnrolledAtAfter() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        Enrollment enrollment = createEnrollment(student, instructor, "ACTIVE");
+        Course course = createCourse();
+        Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
         List<Enrollment> enrollments = enrollmentRepository.findByEnrolledAtAfter(Instant.now().minusSeconds(60));
 
@@ -138,10 +135,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crea una matrícula, luego se verifica si existe por studentId e instructorId
     void shouldExistsByStudentIdAndInstructorId() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        createEnrollment(student, instructor, "ACTIVE");
+        Course course = createCourse();
+        createEnrollment(student, course, "ACTIVE");
 
-        boolean exists = enrollmentRepository.existsByStudentIdAndInstructorId(student.getId(), instructor.getId());
+        boolean exists = enrollmentRepository.existsByStudentIdAndCourseId(student.getId(), course.getId());
 
         assertThat(exists).isTrue();
     }
@@ -150,9 +147,9 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crean matrículas con diferentes estados, luego se verifica el conteo por estado
     void shouldCountEnrollmentsByStatus() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        createEnrollment(student, instructor, "ACTIVE");
-        createEnrollment(student, instructor, "INACTIVE");
+        Course course = createCourse();
+        createEnrollment(student, course, "ACTIVE");
+        createEnrollment(student, course, "INACTIVE");
 
         List<Object[]> result = enrollmentRepository.countEnrollmentsByStatus();
 
@@ -169,8 +166,8 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crea una matrícula con estudiante, luego se verifica si se obtiene la matrícula con estudiante cargado
     void shouldFindEnrollmentsWithStudentByStatus() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        Enrollment enrollment = createEnrollment(student, instructor, "ACTIVE");
+        Course course = createCourse();
+        Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
         List<Enrollment> enrollments = enrollmentRepository.findEnrollmentsWithStudentByStatus("ACTIVE");
 
@@ -182,9 +179,9 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
     // Para este test se crea un estudiante con matrículas, luego se verifica el conteo de matrículas por studentId
     void shouldCountByStudentId() {
         Student student = createStudent();
-        Instructor instructor = createInstructor();
-        createEnrollment(student, instructor, "ACTIVE");
-        createEnrollment(student, instructor, "INACTIVE");
+        Course course = createCourse();
+        createEnrollment(student, course, "ACTIVE");
+        createEnrollment(student, course, "INACTIVE");
 
         long count = enrollmentRepository.countByStudentId(student.getId());
 

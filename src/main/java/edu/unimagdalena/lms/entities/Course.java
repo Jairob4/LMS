@@ -59,23 +59,12 @@ public class Course {
     }
 
     @OneToMany(mappedBy = "course")
-    private Set<Enrollment> enrollments;
+    @Builder.Default
+    private Set<Enrollment> enrollments = new HashSet<>();
 
     public void addEnrollment(Enrollment enrollment) {
-        if (enrollments == null) {
-            enrollments = new HashSet<>();
-        }
         enrollments.add(enrollment);
-    }
-
-    @OneToMany(mappedBy = "course")
-    private Set<Assesment> assesments;
-
-    public void addAssesment(Assesment assesment) {
-        if (assesments == null) {
-            assesments = new HashSet<>();
-        }
-        assesments.add(assesment);
+        enrollment.setCourse(this);
     }
 
     @Column(name = "created_at", nullable = false)
