@@ -33,11 +33,6 @@ public class Student {
         enrollment.setStudent(this);
     }
 
-    public void removeEnrollment(Enrollment enrollment){
-        enrollments.remove(enrollment);
-        enrollment.setStudent(null);
-    }
-
     @OneToMany(mappedBy = "student")
     @Builder.Default
     private Set<Assesment> assesments = new HashSet<>();
@@ -46,11 +41,6 @@ public class Student {
         assesments.add(assessment);
         assessment.setStudent(this);
     }   
-    
-    public void removeAssessment(Assesment assessment){
-        assesments.remove(assessment);
-        assessment.setStudent(null);
-    }
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;

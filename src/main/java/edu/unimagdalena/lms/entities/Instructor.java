@@ -29,13 +29,8 @@ public class Instructor {
     private Set<Course> courses = new HashSet<>();
 
     public void addCourse(Course course){
-       courses.add(course);
-       course.setInstructor(this);  
-    }
-
-    public void removeCourse(Course course){
-        courses.remove(course);
-        course.setInstructor(null);
+        courses.add(course);
+        course.setInstructor(this);
     }
     
     @Column(name = "created_at", nullable = false)

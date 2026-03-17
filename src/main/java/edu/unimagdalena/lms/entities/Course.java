@@ -48,12 +48,12 @@ public class Course {
     @Builder.Default
     private Set<Assesment> assesments = new HashSet<>();
 
-    public void addAssessment(Assesment assessment){
+    public void addAssesment(Assesment assessment){
         assesments.add(assessment);
         assessment.setCourse(this);
     }
 
-     public void removeAssessment(Assesment assessment){
+    public void removeAssesment(Assesment assessment){
         assesments.remove(assessment);
         assessment.setCourse(null);
     }
