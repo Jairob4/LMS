@@ -1,29 +1,35 @@
-package edu.unimagdalena.lms.entities;
+package edu.unimagdalena.lms.domine.entities;
 
 import java.util.*;
 import lombok.*;
+import java.time.Instant;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "lessons")
+@Table(name = "enrollments")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 
-public class Lesson {
+public class Enrollment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
     @Column(nullable = false)
-    private String title;
+    private String status;
 
-    @Column(name = "order_index", nullable = false)
-    private int orderIndex;
+    @Column(name = "enrolled_at", nullable = false)
+    private Instant enrolledAt;
+
 }
