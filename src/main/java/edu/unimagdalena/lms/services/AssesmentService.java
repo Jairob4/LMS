@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AssesmentService {
-    Response create(CreateRequest request);
-    Response get(UUID id);
-    List<Response> list();
+    AssesmentResponse create(AssesmentCreateRequest request);
+    AssesmentResponse get(UUID id);
+    List<AssesmentResponse> list();
     void delete(UUID id);
 
 }

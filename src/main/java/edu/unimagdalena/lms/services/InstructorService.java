@@ -8,11 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface InstructorService {
-    Response create(CreateRequest request);
-    Response get(UUID id);
-    Response getByEmail(String email);
-    Page<Response> list(Pageable pageable);
-    Response update(UUID id, UpdateRequest request);
+    InstructorResponse create(InstructorCreateRequest request);
+    InstructorResponse get(UUID id);
+    InstructorResponse getByEmail(String email);
+    Page<InstructorResponse> list(Pageable pageable);
+    InstructorResponse update(UUID id, InstructorUpdateRequest request);
     void delete(UUID id);
     
 }

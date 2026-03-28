@@ -4,10 +4,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 public class CourseDtos {
-
-    private CourseDtos() {
-    }
-
     public record CreateRequest(
 	    UUID instructorId,
 	    String title,

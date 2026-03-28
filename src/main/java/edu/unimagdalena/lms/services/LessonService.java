@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface LessonService {
-    Response create(CreateRequest request);
-    Response get(UUID id);
-    Response update(UUID id, UpdateRequest request);
-    List<Response> list();
+    LessonResponse create(LessonCreateRequest request);
+    LessonResponse get(UUID id);
+    LessonResponse update(UUID id, LessonUpdateRequest request);
+    List<LessonResponse> list();    
     void delete(UUID id);
 }

@@ -4,10 +4,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 public class AssesmentDtos {
-
-    private AssesmentDtos() {
-    }
-
     public record CreateRequest(
 	    UUID studentId,
 	    UUID courseId,

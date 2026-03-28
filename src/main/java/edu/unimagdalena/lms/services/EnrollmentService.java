@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EnrollmentService {
-    Response create(CreateRequest request);
-    Response get(UUID id);
-    Response update(UUID id, UpdateRequest request);
-    List<Response> list();
+    EnrollmentResponse create(EnrollmentCreateRequest request);
+    EnrollmentResponse get(UUID id);
+    EnrollmentResponse update(UUID id, EnrollmentUpdateRequest request);
+    List<EnrollmentResponse> list();    
     void delete(UUID id);   
 
 }
