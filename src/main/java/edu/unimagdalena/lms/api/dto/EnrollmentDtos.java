@@ -1,29 +1,27 @@
 package edu.unimagdalena.lms.api.dto;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
 public class EnrollmentDtos {
-    public record CreateRequest(
+    public record EnrollmentCreateRequest(
 	    UUID studentId,
 	    UUID courseId,
 	    String status,
 	    Instant enrolledAt
-    ) {
-    }
+    ) implements Serializable { }
 
-    public record UpdateRequest(
+    public record EnrollmentUpdateRequest(
 	    String status,
 	    Instant enrolledAt
-    ) {
-    }
+    ) implements Serializable { }
 
-    public record Response(
+    public record EnrollmentResponse(
 	    UUID id,
 	    UUID studentId,
 	    UUID courseId,
 	    String status,
 	    Instant enrolledAt
-    ) {
-    }
+    ) implements Serializable { }
 }

@@ -1,8 +1,9 @@
 package edu.unimagdalena.lms.services;
 
-import edu.unimagdalena.lms.api.dto.CourseDtos.CreateRequest;
-import edu.unimagdalena.lms.api.dto.CourseDtos.Response;
-import edu.unimagdalena.lms.api.dto.CourseDtos.UpdateRequest;
+import edu.unimagdalena.lms.api.dto.CourseDtos.CourseCreateRequest;
+import edu.unimagdalena.lms.api.dto.CourseDtos.CourseResponse;
+import edu.unimagdalena.lms.api.dto.CourseDtos.CourseUpdateRequest;
+import java.util.UUID;
 import java.util.List;
 
 public interface CourseService {

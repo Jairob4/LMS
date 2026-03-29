@@ -1,8 +1,8 @@
 package edu.unimagdalena.lms.services;
 
-import edu.unimagdalena.lms.api.dto.InstructorDtos.CreateRequest;
-import edu.unimagdalena.lms.api.dto.InstructorDtos.Response;
-import edu.unimagdalena.lms.api.dto.InstructorDtos.UpdateRequest;
+import edu.unimagdalena.lms.api.dto.InstructorDtos.InstructorCreateRequest;
+import edu.unimagdalena.lms.api.dto.InstructorDtos.InstructorResponse;
+import edu.unimagdalena.lms.api.dto.InstructorDtos.InstructorUpdateRequest;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,5 +1,10 @@
 package edu.unimagdalena.lms.services;
 
+import edu.unimagdalena.lms.api.dto.StudentDtos.StudentCreateRequest;
+import edu.unimagdalena.lms.api.dto.StudentDtos.StudentResponse;
+import edu.unimagdalena.lms.api.dto.StudentDtos.StudentUpdateRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;    
 import java.util.UUID;
 
 public interface StudentService {

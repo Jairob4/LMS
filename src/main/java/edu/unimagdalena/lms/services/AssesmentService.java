@@ -1,7 +1,7 @@
 package edu.unimagdalena.lms.services;
 
-import edu.unimagdalena.lms.api.dto.AssesmentDtos.CreateRequest;
-import edu.unimagdalena.lms.api.dto.AssesmentDtos.Response;
+import edu.unimagdalena.lms.api.dto.AssesmentDtos.AssesmentCreateRequest;
+import edu.unimagdalena.lms.api.dto.AssesmentDtos.AssesmentResponse;
 import java.util.List;
 import java.util.UUID;
 

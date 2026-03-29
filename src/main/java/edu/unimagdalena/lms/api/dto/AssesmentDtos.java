@@ -1,32 +1,30 @@
 package edu.unimagdalena.lms.api.dto;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
 public class AssesmentDtos {
-    public record CreateRequest(
+    public record AssesmentCreateRequest(
 	    UUID studentId,
 	    UUID courseId,
 	    String type,
 	    int score,
 	    Instant takenAt
-    ) {
-    }
+    ) implements Serializable { }
 
-    public record UpdateRequest(
-	    String type,
-	    Integer score,
-	    Instant takenAt
-    ) {
-    }
+	public record AssesmentUpdateRequest(
+		String type,
+		Integer score,
+		Instant takenAt
+	) implements Serializable { }
 
-    public record Response(
+    public record AssesmentResponse(
 	    UUID id,
 	    UUID studentId,
 	    UUID courseId,
 	    String type,
 	    int score,
 	    Instant takenAt
-    ) {
-    }
+    ) implements Serializable { }
 }

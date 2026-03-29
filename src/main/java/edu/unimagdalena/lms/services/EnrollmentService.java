@@ -1,8 +1,8 @@
 package edu.unimagdalena.lms.services;
 
-import edu.unimagdalena.lms.api.dto.EnrollmentDtos.CreateRequest;
-import edu.unimagdalena.lms.api.dto.EnrollmentDtos.Response;
-import edu.unimagdalena.lms.api.dto.EnrollmentDtos.UpdateRequest;
+import edu.unimagdalena.lms.api.dto.EnrollmentDtos.EnrollmentCreateRequest;
+import edu.unimagdalena.lms.api.dto.EnrollmentDtos.EnrollmentResponse;
+import edu.unimagdalena.lms.api.dto.EnrollmentDtos.EnrollmentUpdateRequest;
 import java.util.List;
 import java.util.UUID;
 
