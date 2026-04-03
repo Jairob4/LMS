@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Builder
 
-public class Assesment {
+public class Assessment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

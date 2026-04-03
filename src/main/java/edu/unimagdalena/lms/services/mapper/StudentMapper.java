@@ -16,17 +16,18 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface StudentMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "enrollments", ignore = true)
-	@Mapping(target = "assesments", ignore = true)
+	@Mapping(target = "assessments", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
-	Student toEntity(StudentCreateRequest req);
+	Student toEntity(StudentCreateRequest request);
 
+	@Mapping(target = "assessments", source = "assessments")
 	StudentResponse toResponse(Student entity);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "enrollments", ignore = true)
-	@Mapping(target = "assesments", ignore = true)
+	@Mapping(target = "assessments", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	void patch(@MappingTarget Student target, StudentUpdateRequest changes);
@@ -36,8 +37,8 @@ public interface StudentMapper {
 		if (target.getEnrollments() == null) {
 			target.setEnrollments(new HashSet<>());
 		}
-		if (target.getAssesments() == null) {
-			target.setAssesments(new HashSet<>());
+		if (target.getAssessments() == null) {
+			target.setAssessments(new HashSet<>());
 		}
 	}
 }

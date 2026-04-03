@@ -7,9 +7,10 @@ import edu.unimagdalena.lms.domine.repositories.LessonRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -78,10 +79,10 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         Lesson lesson1 = createLesson(course, 1);
         Lesson lesson2 = createLesson(course, 2);
 
-        List<Lesson> lessons = lessonRepository.findByCourseId(course.getId());
+        Page<Lesson> lessons = lessonRepository.findByCourseId(course.getId(), PageRequest.of(0, 10));
 
-        assertThat(lessons).hasSize(2);
-        assertThat(lessons).extracting("id").containsExactlyInAnyOrder(lesson1.getId(), lesson2.getId());
+        assertThat(lessons.getTotalElements()).isEqualTo(2);
+        assertThat(lessons.getContent()).extracting("id").containsExactlyInAnyOrder(lesson1.getId(), lesson2.getId());
     }
 
     @Test
@@ -110,10 +111,10 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         lesson2.setTitle("Python Intro");
         lessonRepository.save(lesson2);
 
-        List<Lesson> javaLessons = lessonRepository.findByTitleContainingIgnoreCase("Java");
+        Page<Lesson> javaLessons = lessonRepository.findByTitleContainingIgnoreCase("Java", PageRequest.of(0, 10));
 
-        assertThat(javaLessons).hasSize(1);
-        assertThat(javaLessons.get(0).getTitle()).isEqualTo("Java Basics");
+        assertThat(javaLessons.getTotalElements()).isEqualTo(1);
+        assertThat(javaLessons.getContent().get(0).getTitle()).isEqualTo("Java Basics");
     }
 
     @Test
@@ -137,11 +138,11 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         Lesson lesson1 = createLesson(course, 2);
         Lesson lesson2 = createLesson(course, 1);
 
-        List<Lesson> lessons = lessonRepository.findByCourseIdOrderByIndex(course.getId());
+        Page<Lesson> lessons = lessonRepository.findByCourseIdOrderByIndex(course.getId(), PageRequest.of(0, 10));
 
-        assertThat(lessons).hasSize(2);
-        assertThat(lessons.get(0).getOrderIndex()).isEqualTo(1);
-        assertThat(lessons.get(1).getOrderIndex()).isEqualTo(2);
+        assertThat(lessons.getTotalElements()).isEqualTo(2);
+        assertThat(lessons.getContent().get(0).getOrderIndex()).isEqualTo(1);
+        assertThat(lessons.getContent().get(1).getOrderIndex()).isEqualTo(2);
     }
 
     @Test
@@ -178,11 +179,11 @@ class LessonRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Lesson lesson = createLesson(course, 1);
 
-        List<Lesson> lessonsWithCourse = lessonRepository.findLessonsWithCourse();
+        Page<Lesson> lessonsWithCourse = lessonRepository.findLessonsWithCourse(PageRequest.of(0, 10));
 
-        assertThat(lessonsWithCourse).hasSize(1);
-        assertThat(lessonsWithCourse.get(0).getId()).isEqualTo(lesson.getId());
-        assertThat(lessonsWithCourse.get(0).getCourse()).isNotNull();
-        assertThat(lessonsWithCourse.get(0).getCourse().getId()).isEqualTo(course.getId());
+        assertThat(lessonsWithCourse.getTotalElements()).isEqualTo(1);
+        assertThat(lessonsWithCourse.getContent().get(0).getId()).isEqualTo(lesson.getId());
+        assertThat(lessonsWithCourse.getContent().get(0).getCourse()).isNotNull();
+        assertThat(lessonsWithCourse.getContent().get(0).getCourse().getId()).isEqualTo(course.getId());
     }
 }

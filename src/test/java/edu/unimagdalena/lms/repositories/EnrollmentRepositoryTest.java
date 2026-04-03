@@ -7,6 +7,8 @@ import edu.unimagdalena.lms.domine.repositories.StudentRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
 import java.util.List;
@@ -75,10 +77,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse();
         Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
-        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(student.getId());
+        Page<Enrollment> enrollments = enrollmentRepository.findByStudentId(student.getId(), PageRequest.of(0, 10));
 
-        assertThat(enrollments).hasSize(1);
-        assertThat(enrollments.get(0).getId()).isEqualTo(enrollment.getId());
+        assertThat(enrollments.getTotalElements()).isEqualTo(1);
+        assertThat(enrollments.getContent().get(0).getId()).isEqualTo(enrollment.getId());
     }
 
     @Test
@@ -88,10 +90,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse();
         Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
-        List<Enrollment> enrollments = enrollmentRepository.findByCourseId(course.getId());
+        Page<Enrollment> enrollments = enrollmentRepository.findByCourseId(course.getId(), PageRequest.of(0, 10));
 
-        assertThat(enrollments).hasSize(1);
-        assertThat(enrollments.get(0).getId()).isEqualTo(enrollment.getId());
+        assertThat(enrollments.getTotalElements()).isEqualTo(1);
+        assertThat(enrollments.getContent().get(0).getId()).isEqualTo(enrollment.getId());
     }
 
     @Test
@@ -102,10 +104,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         Enrollment enrollment1 = createEnrollment(student, course, "ACTIVE");
         Enrollment enrollment2 = createEnrollment(student, course, "INACTIVE");
 
-        List<Enrollment> activeEnrollments = enrollmentRepository.findByStatus("ACTIVE");
+        Page<Enrollment> activeEnrollments = enrollmentRepository.findByStatus("ACTIVE", PageRequest.of(0, 10));
 
-        assertThat(activeEnrollments).hasSize(1);
-        assertThat(activeEnrollments.get(0).getId()).isEqualTo(enrollment1.getId());
+        assertThat(activeEnrollments.getTotalElements()).isEqualTo(1);
+        assertThat(activeEnrollments.getContent().get(0).getId()).isEqualTo(enrollment1.getId());
     }
 
     @Test
@@ -115,10 +117,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse();
         Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
-        List<Enrollment> enrollments = enrollmentRepository.findByStudentIdAndStatus(student.getId(), "ACTIVE");
+        Page<Enrollment> enrollments = enrollmentRepository.findByStudentIdAndStatus(student.getId(), "ACTIVE", PageRequest.of(0, 10));
 
-        assertThat(enrollments).hasSize(1);
-        assertThat(enrollments.get(0).getId()).isEqualTo(enrollment.getId());
+        assertThat(enrollments.getTotalElements()).isEqualTo(1);
+        assertThat(enrollments.getContent().get(0).getId()).isEqualTo(enrollment.getId());
     }
 
     @Test
@@ -128,10 +130,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse();
         Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
-        List<Enrollment> enrollments = enrollmentRepository.findByEnrolledAtAfter(Instant.now().minusSeconds(60));
+        Page<Enrollment> enrollments = enrollmentRepository.findByEnrolledAtAfter(Instant.now().minusSeconds(60), PageRequest.of(0, 10));
 
-        assertThat(enrollments).hasSize(1);
-        assertThat(enrollments.get(0).getId()).isEqualTo(enrollment.getId());
+        assertThat(enrollments.getTotalElements()).isEqualTo(1);
+        assertThat(enrollments.getContent().get(0).getId()).isEqualTo(enrollment.getId());
     }
 
     @Test
@@ -172,10 +174,10 @@ class EnrollmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse();
         Enrollment enrollment = createEnrollment(student, course, "ACTIVE");
 
-        List<Enrollment> enrollments = enrollmentRepository.findEnrollmentsWithStudentByStatus("ACTIVE");
+        Page<Enrollment> enrollments = enrollmentRepository.findEnrollmentsWithStudentByStatus("ACTIVE", PageRequest.of(0, 10));
 
-        assertThat(enrollments).hasSize(1);
-        assertThat(enrollments.get(0).getStudent().getId()).isEqualTo(student.getId());
+        assertThat(enrollments.getTotalElements()).isEqualTo(1);
+        assertThat(enrollments.getContent().get(0).getStudent().getId()).isEqualTo(student.getId());
     }
 
     @Test

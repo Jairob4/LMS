@@ -1,5 +1,7 @@
 package edu.unimagdalena.lms.domine.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,6 +23,9 @@ public interface InstructorRepository extends JpaRepository<Instructor, UUID> {
     // JPQL - buscar instructor por nombre completo (campo con guion bajo)
     @Query("SELECT i FROM Instructor i WHERE LOWER(i.fullName) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Instructor> findByFullNameContaining(@Param("name") String name);
+
+    // ORM - buscar instructor por nombre completo con paginacion
+    Page<Instructor> findByFullNameContainingIgnoreCase(String fullName, Pageable pageable);
 
     // JPQL - obtener instructores con cursos activos
     @Query("SELECT DISTINCT i FROM Instructor i JOIN i.courses c WHERE c.active = true")

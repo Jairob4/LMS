@@ -2,14 +2,20 @@ package edu.unimagdalena.lms.api.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
+
+import edu.unimagdalena.lms.api.dto.AssessmentDtos.AssessmentResponse;
+import edu.unimagdalena.lms.api.dto.EnrollmentDtos.EnrollmentResponse;
+import edu.unimagdalena.lms.api.dto.LessonDtos.LessonResponse;
 
 public class CourseDtos {
     public record CourseCreateRequest(
-	    UUID instructorId,
 	    String title,
 	    String status,
-	    boolean active
+	    boolean active,
+		Instant createdAt,
+		Instant updatedAt
     ) implements Serializable { }
 
     public record CourseUpdateRequest(
@@ -20,11 +26,14 @@ public class CourseDtos {
 
     public record CourseResponse(
 	    UUID id,
-	    UUID instructorId,
 	    String title,
 	    String status,
 	    boolean active,
 	    Instant createdAt,
-	    Instant updatedAt
+	    Instant updatedAt,
+	    UUID instructorId,
+	    Set<AssessmentResponse> assessments,
+	    Set<EnrollmentResponse> enrollments,
+	    Set<LessonResponse> lessons
     ) implements Serializable { }
 }

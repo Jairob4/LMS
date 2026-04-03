@@ -24,4 +24,10 @@ public class EnrollmentDtos {
 	    String status,
 	    Instant enrolledAt
     ) implements Serializable { }
+
+    public record CourseEnrollmentStatsResponse(
+	    UUID courseId,
+	    String courseTitle,
+	    long totalEnrollments
+    ) implements Serializable { }
 }

@@ -1,19 +1,19 @@
 package edu.unimagdalena.lms.services;
 
-import java.util.List;
 import java.util.UUID;
 
-//No se si eliminar esta interface, no se si es necesaria el repo del profe no tiene 
-//member profile, pero por ahora la dejo
+import edu.unimagdalena.lms.api.dto.InstructorProfileDtos.InstructorProfileCreateRequest;
+import edu.unimagdalena.lms.api.dto.InstructorProfileDtos.InstructorProfileResponse;
+import java.util.Optional;  
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 public interface InstructorProfileService {
-    InstructorProfileResponse create(InstructorProfileCreateRequest request);
-    InstructorProfileResponse get(UUID id);
-    InstructorProfileResponse getByPhone(String phone);
-    InstructorProfileResponse update(UUID id, InstructorProfileUpdateRequest request);
-    List<InstructorProfileResponse> list();    
+    InstructorProfileResponse createInstructorProfile(InstructorProfileCreateRequest request, UUID instructorId);
+    InstructorProfileResponse getInstructorProfile(UUID id);
     void delete(UUID id);
-
-// Revisa este bro
-    InstructorProfileResponse getByInstructorId(UUID instructorId);
+    Page<InstructorProfileResponse> findByInstructorFullNameIgnoreCase(String fullName, Pageable pageable);
+    Optional<InstructorProfileResponse> findByPhoneNumber(String phone);
+    boolean existsByPhoneNumber(String phone);
 }

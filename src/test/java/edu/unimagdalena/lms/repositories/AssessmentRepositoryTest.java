@@ -1,13 +1,15 @@
 package edu.unimagdalena.lms.repositories;
 
 import edu.unimagdalena.lms.domine.entities.*;
-import edu.unimagdalena.lms.domine.repositories.AssesmentRepository;
+import edu.unimagdalena.lms.domine.repositories.AssessmentRepository;
 import edu.unimagdalena.lms.domine.repositories.CourseRepository;
 import edu.unimagdalena.lms.domine.repositories.InstructorRepository;
 import edu.unimagdalena.lms.domine.repositories.StudentRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
 import java.util.List;
@@ -17,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
 
-class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
+class AssessmentRepositoryTest extends AbstractIntegrationDBTest {
 
     @Autowired
-    private AssesmentRepository assesmentRepository;
+    private AssessmentRepository assessmentRepository;
 
     @Autowired
     private StudentRepository studentRepository;
@@ -35,7 +37,7 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
 
     @BeforeEach
     void clean() {
-        assesmentRepository.deleteAll();
+        assessmentRepository.deleteAll();
         courseRepository.deleteAll();
         instructorRepository.deleteAll();
         studentRepository.deleteAll();
@@ -80,9 +82,9 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         return studentRepository.save(student);
     }
 
-    private Assesment createAssesment(Student student, Course course, int score, String type) {
+    private Assessment createAssessment(Student student, Course course, int score, String type) {
 
-        Assesment assesment = Assesment.builder()
+        Assessment assessment = Assessment.builder()
                 .student(student)
                 .course(course)
                 .score(score)
@@ -90,7 +92,7 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
                 .takenAt(Instant.now())
                 .build();
 
-        return assesmentRepository.save(assesment);
+        return assessmentRepository.save(assessment);
     }
 
     @Test
@@ -101,13 +103,13 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 80, "quiz");
-        createAssesment(student, course, 90, "exam");
+        createAssessment(student, course, 80, "quiz");
+        createAssessment(student, course, 90, "exam");
 
-        List<Assesment> result =
-                assesmentRepository.findByStudentId(student.getId());
+        Page<Assessment> result =
+            assessmentRepository.findByStudentId(student.getId(), PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(2);
+        assertThat(result.getTotalElements()).isEqualTo(2);
     }
 
     @Test
@@ -118,13 +120,13 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 80, "quiz");
-        createAssesment(student, course, 90, "exam");
+        createAssessment(student, course, 80, "quiz");
+        createAssessment(student, course, 90, "exam");
 
-        List<Assesment> result =
-                assesmentRepository.findByCourseId(course.getId());
+        Page<Assessment> result =
+            assessmentRepository.findByCourseId(course.getId(), PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(2);
+        assertThat(result.getTotalElements()).isEqualTo(2);
     }
 
     @Test
@@ -135,14 +137,14 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 85, "quiz");
-        createAssesment(student, course, 95, "exam");
+        createAssessment(student, course, 85, "quiz");
+        createAssessment(student, course, 95, "exam");
 
-        List<Assesment> result =
-                assesmentRepository.findByType("quiz");
+        Page<Assessment> result =
+            assessmentRepository.findByType("quiz", PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getType()).isEqualTo("quiz");
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getType()).isEqualTo("quiz");
     }
 
     @Test
@@ -153,13 +155,13 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 60, "quiz");
-        createAssesment(student, course, 90, "exam");
+        createAssessment(student, course, 60, "quiz");
+        createAssessment(student, course, 90, "exam");
 
-        List<Assesment> result =
-                assesmentRepository.findByScoreGreaterThanEqual(80);
+        Page<Assessment> result =
+            assessmentRepository.findByScoreGreaterThanEqual(80, PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(1);
+        assertThat(result.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -172,15 +174,16 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
 
         Instant now = Instant.now();
 
-        createAssesment(student, course, 75, "quiz");
+        createAssessment(student, course, 75, "quiz");
 
-        List<Assesment> result =
-                assesmentRepository.findByTakenAtBetween(
+        Page<Assessment> result =
+                assessmentRepository.findByTakenAtBetween(
                         now.minusSeconds(60),
-                        now.plusSeconds(60)
+                now.plusSeconds(60),
+                PageRequest.of(0, 10)
                 );
 
-        assertThat(result).hasSize(1);
+        assertThat(result.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -191,11 +194,11 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 80, "quiz");
-        createAssesment(student, course, 100, "quiz");
+        createAssessment(student, course, 80, "quiz");
+        createAssessment(student, course, 100, "quiz");
 
         Double avg =
-                assesmentRepository.findAverageScoreByCourseId(course.getId());
+                assessmentRepository.findAverageScoreByCourseId(course.getId());
 
         assertThat(avg).isEqualTo(90.0);
     }
@@ -208,15 +211,16 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 85, "quiz");
+        createAssessment(student, course, 85, "quiz");
 
-        List<Assesment> result =
-                assesmentRepository.findByStudentIdAndCourseId(
+        Page<Assessment> result =
+                assessmentRepository.findByStudentIdAndCourseId(
                         student.getId(),
-                        course.getId()
+                course.getId(),
+                PageRequest.of(0, 10)
                 );
 
-        assertThat(result).hasSize(1);
+        assertThat(result.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -227,17 +231,18 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 60, "quiz");
-        createAssesment(student, course, 95, "exam");
+        createAssessment(student, course, 60, "quiz");
+        createAssessment(student, course, 95, "exam");
 
-        List<Assesment> result =
-                assesmentRepository.findPassingAssesmentsByStudent(
+        Page<Assessment> result =
+                assessmentRepository.findPassingAssessmentsByStudent(
                         student.getId(),
-                        80
+                80,
+                PageRequest.of(0, 10)
                 );
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getScore()).isGreaterThanOrEqualTo(80);
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getScore()).isGreaterThanOrEqualTo(80);
     }
 
     @Test
@@ -248,10 +253,10 @@ class AssesmentRepositoryTest extends AbstractIntegrationDBTest {
         Course course = createCourse(instructor);
         Student student = createStudent();
 
-        createAssesment(student, course, 80, "quiz");
-        createAssesment(student, course, 95, "quiz");
+        createAssessment(student, course, 80, "quiz");
+        createAssessment(student, course, 95, "quiz");
 
-        List<Object[]> result = assesmentRepository.findMaxScoreByType();
+        List<Object[]> result = assessmentRepository.findMaxScoreByType();
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0)[0]).isEqualTo("quiz");

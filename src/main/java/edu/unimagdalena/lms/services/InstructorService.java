@@ -6,6 +6,7 @@ import edu.unimagdalena.lms.api.dto.InstructorDtos.InstructorUpdateRequest;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.Optional;  
 
 public interface InstructorService {
     InstructorResponse create(InstructorCreateRequest request);
@@ -13,6 +14,9 @@ public interface InstructorService {
     InstructorResponse getByEmail(String email);
     Page<InstructorResponse> list(Pageable pageable);
     InstructorResponse update(UUID id, InstructorUpdateRequest request);
+    Page<InstructorResponse> findByFullNameContainingIgnoreCase(String fullName, Pageable pageable);
+    Optional<InstructorResponse> findByEmail(String email);
+    boolean existsByEmail(String email);
     void delete(UUID id);
     
 }

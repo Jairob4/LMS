@@ -46,15 +46,15 @@ public class Course {
     
     @OneToMany(mappedBy = "course")
     @Builder.Default
-    private Set<Assesment> assesments = new HashSet<>();
+    private Set<Assessment> assessments = new HashSet<>();
 
-    public void addAssesment(Assesment assessment){
-        assesments.add(assessment);
+    public void addAssessment(Assessment assessment){
+        assessments.add(assessment);
         assessment.setCourse(this);
     }
 
-    public void removeAssesment(Assesment assessment){
-        assesments.remove(assessment);
+    public void removeAssessment(Assessment assessment){
+        assessments.remove(assessment);
         assessment.setCourse(null);
     }
 

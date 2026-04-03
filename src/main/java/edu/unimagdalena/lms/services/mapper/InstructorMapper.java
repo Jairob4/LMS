@@ -19,7 +19,7 @@ public interface InstructorMapper {
 	@Mapping(target = "courses", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
-	Instructor toEntity(InstructorCreateRequest req);
+	Instructor toEntity(InstructorCreateRequest request);
 
 	InstructorResponse toResponse(Instructor entity);
 

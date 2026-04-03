@@ -1,16 +1,17 @@
 package edu.unimagdalena.lms.repositories;
 
 import edu.unimagdalena.lms.domine.entities.*;
-import edu.unimagdalena.lms.domine.repositories.AssesmentRepository;
+import edu.unimagdalena.lms.domine.repositories.AssessmentRepository;
 import edu.unimagdalena.lms.domine.repositories.EnrollmentRepository;
 import edu.unimagdalena.lms.domine.repositories.StudentRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    private AssesmentRepository assesmentRepository;
+    private AssessmentRepository assesmentRepository;
 
     @BeforeEach
     void clean() {
@@ -55,8 +56,8 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
         return enrollmentRepository.save(enrollment);
     }
 
-    private Assesment createAssesment(Student student, int score) {
-        Assesment assesment = Assesment.builder()
+    private Assessment createAssesment(Student student, int score) {
+        Assessment assesment = Assessment.builder()
                 .student(student)
                 .score(score)
                 .takenAt(Instant.now())
@@ -93,10 +94,10 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
         student.setFullName("Juan Perez");
         studentRepository.save(student);
 
-        List<Student> result = studentRepository.findByFullNameContaining("Juan");
+        Page<Student> result = studentRepository.findByFullNameContaining("Juan", PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getFullName()).isEqualTo("Juan Perez");
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getFullName()).isEqualTo("Juan Perez");
     }
 
     @Test
@@ -117,10 +118,10 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
         Student student = createStudent();
         createEnrollment(student, "ACTIVE");
 
-        List<Student> result = studentRepository.findStudentsWithEnrollmentStatus("ACTIVE");
+        Page<Student> result = studentRepository.findStudentsWithEnrollmentStatus("ACTIVE", PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(student.getId());
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getId()).isEqualTo(student.getId());
     }
 
     @Test
@@ -129,10 +130,10 @@ class StudentRepositoryTest extends AbstractIntegrationDBTest {
         Student student = createStudent();
         createAssesment(student, 90);
 
-        List<Student> result = studentRepository.findStudentsWithAssesments();
+        Page<Student> result = studentRepository.findStudentsWithAssessments(PageRequest.of(0, 10));
 
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getId()).isEqualTo(student.getId());
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent().get(0).getId()).isEqualTo(student.getId());
     }
 
     @Test

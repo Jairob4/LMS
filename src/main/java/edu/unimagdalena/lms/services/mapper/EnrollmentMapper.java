@@ -15,7 +15,7 @@ public interface EnrollmentMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "student.id", source = "studentId")
 	@Mapping(target = "course.id", source = "courseId")
-	Enrollment toEntity(EnrollmentCreateRequest req);
+	Enrollment toEntity(EnrollmentCreateRequest request);
 
 	@Mapping(target = "studentId", source = "student.id")
 	@Mapping(target = "courseId", source = "course.id")

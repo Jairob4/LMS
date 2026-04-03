@@ -4,22 +4,20 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
-public class AssesmentDtos {
-    public record AssesmentCreateRequest(
-	    UUID studentId,
-	    UUID courseId,
+public class AssessmentDtos {
+    public record AssessmentCreateRequest(
 	    String type,
 	    int score,
 	    Instant takenAt
     ) implements Serializable { }
 
-	public record AssesmentUpdateRequest(
+	public record AssessmentUpdateRequest(
 		String type,
 		Integer score,
 		Instant takenAt
 	) implements Serializable { }
 
-    public record AssesmentResponse(
+    public record AssessmentResponse(
 	    UUID id,
 	    UUID studentId,
 	    UUID courseId,

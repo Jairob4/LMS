@@ -2,11 +2,14 @@ package edu.unimagdalena.lms.api.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
+
+import jakarta.validation.constraints.Size;
 
 public class InstructorDtos {
     public record InstructorCreateRequest(
-	    String email,
+	 @Size(max=320)   String email,
 	    String fullName
     ) implements Serializable { }
 
@@ -20,6 +23,7 @@ public class InstructorDtos {
 	    String email,
 	    String fullName,
 	    Instant createdAt,
-	    Instant updatedAt
+	    Instant updatedAt,
+		Set<CourseDtos.CourseResponse> courses
     ) implements Serializable { }
 }

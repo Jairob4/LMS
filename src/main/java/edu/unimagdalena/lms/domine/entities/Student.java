@@ -35,10 +35,10 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     @Builder.Default
-    private Set<Assesment> assesments = new HashSet<>();
+    private Set<Assessment> assessments = new HashSet<>();
 
-    public void addAssessment(Assesment assessment){
-        assesments.add(assessment);
+    public void addAssessment(Assessment assessment){
+        assessments.add(assessment);
         assessment.setStudent(this);
     }   
 

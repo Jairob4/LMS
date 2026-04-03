@@ -1,5 +1,7 @@
 package edu.unimagdalena.lms.domine.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,19 +15,19 @@ import java.util.UUID;
 public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     // ORM - buscar cursos de un instructor
-    List<Course> findByInstructorId(UUID instructorId);
+    Page<Course> findByInstructorId(UUID instructorId, Pageable pageable);
 
     // ORM - buscar por estado
-    List<Course> findByStatus(String status);
+    Page<Course> findByStatus(String status, Pageable pageable);
 
     // ORM - buscar cursos activos
-    List<Course> findByActive(boolean active);
+    Page<Course> findByActive(boolean active, Pageable pageable);
 
     // ORM - buscar por título que contenga una cadena
-    List<Course> findByTitleContainingIgnoreCase(String keyword);
+    Page<Course> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
 
     // ORM - buscar cursos activos de un instructor
-    List<Course> findByInstructorIdAndActive(UUID instructorId, boolean active);
+    Page<Course> findByInstructorIdAndActive(UUID instructorId, boolean active, Pageable pageable);
 
     // JPQL - obtener cursos con sus lecciones cargadas (fetch join)
     @Query("SELECT DISTINCT c FROM Course c LEFT JOIN FETCH c.lessons WHERE c.id = :id")
@@ -33,7 +35,7 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     // JPQL - obtener cursos activos de un instructor por nombre del instructor
     @Query("SELECT c FROM Course c WHERE c.instructor.id = :instructorId AND c.active = true ORDER BY c.createdAt DESC")
-    List<Course> findActiveCoursesByInstructor(@Param("instructorId") UUID instructorId);
+    Page<Course> findActiveCoursesByInstructor(@Param("instructorId") UUID instructorId, Pageable pageable);
 
     // JPQL - contar cursos por estado
     @Query("SELECT c.status, COUNT(c) FROM Course c GROUP BY c.status")
@@ -41,13 +43,13 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     // JPQL - buscar cursos que tengan al menos una lección
     @Query("SELECT DISTINCT c FROM Course c WHERE SIZE(c.lessons) > 0")
-    List<Course> findCoursesWithLessons();
+    Page<Course> findCoursesWithLessons(Pageable pageable);
 
     // JPQL - buscar cursos que tengan al menos una matrícula activa
     @Query("SELECT DISTINCT c FROM Course c JOIN c.enrollments e WHERE e.status = 'ACTIVE'")
-    List<Course> findCoursesWithActiveEnrollments();
+    Page<Course> findCoursesWithActiveEnrollments(Pageable pageable);
 
     // JPQL - buscar cursos que tengan al menos una evaluación con puntaje mayor a un valor
-    @Query("SELECT DISTINCT c FROM Course c JOIN c.assesments a WHERE a.score > :score")
-    List<Course> findCoursesWithAssesmentsAboveScore(@Param("score") double score);
+    @Query("SELECT DISTINCT c FROM Course c JOIN c.assessments a WHERE a.score > :score")
+    Page<Course> findCoursesWithAssessmentsAboveScore(@Param("score") double score, Pageable pageable);
 }

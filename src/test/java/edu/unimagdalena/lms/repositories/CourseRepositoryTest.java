@@ -1,7 +1,7 @@
 package edu.unimagdalena.lms.repositories;
 
 import edu.unimagdalena.lms.domine.entities.*;
-import edu.unimagdalena.lms.domine.repositories.AssesmentRepository;
+import edu.unimagdalena.lms.domine.repositories.AssessmentRepository;
 import edu.unimagdalena.lms.domine.repositories.CourseRepository;
 import edu.unimagdalena.lms.domine.repositories.EnrollmentRepository;
 import edu.unimagdalena.lms.domine.repositories.InstructorRepository;
@@ -10,6 +10,8 @@ import edu.unimagdalena.lms.domine.repositories.StudentRepository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
 import java.util.List;
@@ -37,7 +39,7 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
     private EnrollmentRepository enrollmentRepository;
 
     @Autowired
-    private AssesmentRepository assesmentRepository;
+    private AssessmentRepository assesmentRepository;
 
     @BeforeEach
     void clean(){
@@ -95,9 +97,9 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         return enrollmentRepository.save(enrollment);
     }
 
-    private Assesment createAssesment(Student student, Course course, int score, String type) {
+    private Assessment createAssessment(Student student, Course course, int score, String type) {
 
-        Assesment assesment = Assesment.builder()
+        Assessment assesment = Assessment.builder()
                 .student(student)
                 .course(course)
                 .score(score)
@@ -126,10 +128,10 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         Course course1 = createCourse(instructor);
         Course course2 = createCourse(instructor);
 
-        List<Course> courses = courseRepository.findByInstructorId(instructor.getId());
+        Page<Course> courses = courseRepository.findByInstructorId(instructor.getId(), PageRequest.of(0, 10));
 
-        assertThat(courses).hasSize(2);
-        assertThat(courses).extracting("id").containsExactlyInAnyOrder(course1.getId(), course2.getId());
+        assertThat(courses.getTotalElements()).isEqualTo(2);
+        assertThat(courses.getContent()).extracting("id").containsExactlyInAnyOrder(course1.getId(), course2.getId());
     }
 
     @Test
@@ -145,11 +147,11 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         course2.setStatus("INACTIVE");
         courseRepository.save(course2);
 
-        List<Course> activeCourses = courseRepository.findByStatus("ACTIVE");
-        List<Course> inactiveCourses = courseRepository.findByStatus("INACTIVE");
+        Page<Course> activeCourses = courseRepository.findByStatus("ACTIVE", PageRequest.of(0, 10));
+        Page<Course> inactiveCourses = courseRepository.findByStatus("INACTIVE", PageRequest.of(0, 10));
 
-        assertThat(activeCourses).hasSize(1);
-        assertThat(inactiveCourses).hasSize(1);
+        assertThat(activeCourses.getTotalElements()).isEqualTo(1);
+        assertThat(inactiveCourses.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -165,9 +167,9 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         course2.setActive(true);
         courseRepository.save(course2);
 
-        List<Course> activeCourses = courseRepository.findByActive(true);
+        Page<Course> activeCourses = courseRepository.findByActive(true, PageRequest.of(0, 10));
 
-        assertThat(activeCourses).hasSize(1);
+        assertThat(activeCourses.getTotalElements()).isEqualTo(1);
     }
 
     @Test
@@ -183,14 +185,14 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         course2.setTitle("Python Programming");
         courseRepository.save(course2);
 
-        List<Course> javaCourses = courseRepository.findByTitleContainingIgnoreCase("Java");
-        List<Course> pythonCourses = courseRepository.findByTitleContainingIgnoreCase("Python");
+        Page<Course> javaCourses = courseRepository.findByTitleContainingIgnoreCase("Java", PageRequest.of(0, 10));
+        Page<Course> pythonCourses = courseRepository.findByTitleContainingIgnoreCase("Python", PageRequest.of(0, 10));
 
-        assertThat(javaCourses).hasSize(1);
-        assertThat(javaCourses.get(0).getTitle()).isEqualTo("Java Programming");
+        assertThat(javaCourses.getTotalElements()).isEqualTo(1);
+        assertThat(javaCourses.getContent().get(0).getTitle()).isEqualTo("Java Programming");
 
-        assertThat(pythonCourses).hasSize(1);
-        assertThat(pythonCourses.get(0).getTitle()).isEqualTo("Python Programming");
+        assertThat(pythonCourses.getTotalElements()).isEqualTo(1);
+        assertThat(pythonCourses.getContent().get(0).getTitle()).isEqualTo("Python Programming");
 
     }
 
@@ -207,10 +209,10 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         course2.setActive(true);
         courseRepository.save(course2);
 
-        List<Course> activeCourses = courseRepository.findByInstructorIdAndActive(instructor.getId(), true);
+        Page<Course> activeCourses = courseRepository.findByInstructorIdAndActive(instructor.getId(), true, PageRequest.of(0, 10));
 
-        assertThat(activeCourses).hasSize(1);
-        assertThat(activeCourses.get(0).getId()).isEqualTo(course2.getId());
+        assertThat(activeCourses.getTotalElements()).isEqualTo(1);
+        assertThat(activeCourses.getContent().get(0).getId()).isEqualTo(course2.getId());
     }
 
     @Test
@@ -241,10 +243,10 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
         course2.setActive(false);
         courseRepository.save(course2);
 
-        List<Course> activeCourses = courseRepository.findActiveCoursesByInstructor(instructor.getId());
+        Page<Course> activeCourses = courseRepository.findActiveCoursesByInstructor(instructor.getId(), PageRequest.of(0, 10));
 
-        assertThat(activeCourses).hasSize(1);
-        assertThat(activeCourses.get(0).getId()).isEqualTo(course1.getId());
+        assertThat(activeCourses.getTotalElements()).isEqualTo(1);
+        assertThat(activeCourses.getContent().get(0).getId()).isEqualTo(course1.getId());
     }
 
     @Test
@@ -288,10 +290,10 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
 
         courseWithLessons.addLesson(lesson);
 
-        List<Course> coursesWithLessons = courseRepository.findCoursesWithLessons();
+        Page<Course> coursesWithLessons = courseRepository.findCoursesWithLessons(PageRequest.of(0, 10));
 
-        assertThat(coursesWithLessons).hasSize(1);
-        assertThat(coursesWithLessons.get(0).getId()).isEqualTo(courseWithLessons.getId());
+        assertThat(coursesWithLessons.getTotalElements()).isEqualTo(1);
+        assertThat(coursesWithLessons.getContent().get(0).getId()).isEqualTo(courseWithLessons.getId());
     }
 
     @Test
@@ -304,26 +306,26 @@ public class CourseRepositoryTest extends AbstractIntegrationDBTest {
 
         courseWithActiveEnrollment.addEnrollment(enrollment);
 
-        List<Course> coursesWithActiveEnrollments = courseRepository.findCoursesWithActiveEnrollments();
+        Page<Course> coursesWithActiveEnrollments = courseRepository.findCoursesWithActiveEnrollments(PageRequest.of(0, 10));
 
-        assertThat(coursesWithActiveEnrollments).hasSize(1);
-        assertThat(coursesWithActiveEnrollments.get(0).getId()).isEqualTo(courseWithActiveEnrollment.getId());
+        assertThat(coursesWithActiveEnrollments.getTotalElements()).isEqualTo(1);
+        assertThat(coursesWithActiveEnrollments.getContent().get(0).getId()).isEqualTo(courseWithActiveEnrollment.getId());
     }
 
      @Test
     // Para este test se crean cursos con una evaluación con puntaje mayor a un valor, luego se verifica si se obtienen solo los cursos que tienen evaluaciones con puntaje mayor a ese valor
-    void shouldFindCoursesWithAssesmentsAboveScore() {
+    void shouldFindCoursesWithAssessmentsAboveScore() {
         Instructor instructor = createInstructor();
         Student student = createStudent();
-        Course courseWithHighAssesment = createCourse(instructor);
-        Assesment assesment = createAssesment(student, courseWithHighAssesment, 8, "quiz");
+        Course courseWithHighAssessment = createCourse(instructor);
+        Assessment assessment = createAssessment(student, courseWithHighAssessment, 8, "quiz");
 
-        courseWithHighAssesment.addAssesment(assesment);
+        courseWithHighAssessment.addAssessment(assessment);
 
-        List<Course> coursesWithHighAssessments = courseRepository.findCoursesWithAssesmentsAboveScore(7.0);
+        Page<Course> coursesWithHighAssessments = courseRepository.findCoursesWithAssessmentsAboveScore(7.0, PageRequest.of(0, 10));
 
-        assertThat(coursesWithHighAssessments).hasSize(1);
-        assertThat(coursesWithHighAssessments.get(0).getId()).isEqualTo(courseWithHighAssesment.getId());
+        assertThat(coursesWithHighAssessments.getTotalElements()).isEqualTo(1);
+        assertThat(coursesWithHighAssessments.getContent().get(0).getId()).isEqualTo(courseWithHighAssessment.getId());
     }
 
 }
