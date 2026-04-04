@@ -1,4 +1,4 @@
-package edu.unimagdalena.lms.domine.repositories;
+package edu.unimagdalena.lms.domine.repositories
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
